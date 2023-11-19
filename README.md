@@ -1,6 +1,7 @@
 ### 1. Installation
 ```
 wget -O - https://raw.githubusercontent.com/grassjelly/eztmux/main/install.bash | bash
+source ~/.bashrc
 ```
 
 ### 2. Usage
