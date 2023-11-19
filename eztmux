@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -e
+
+TMUX_CONFIG_DIR=$HOME/.config/tmuxinator/eztmux
+
+write_profile() {
+  cat << EOF > $PROFILE_PATH
+name: $ROS2_WS_CONTAINER_NAME
+on_project_start: 
+  - #do some stuff here
+pre_window: 
+  - #sourcing can be done here
+on_project_exit: 
+  - #do sume stuff here (eg. docker compose down)
+tmux_options: -f \$HOME/.config/tmuxinator/eztmux/.tmux.conf
+windows:
+  - main:
+      panes:
+EOF
+}
+
+MAX_PANE=20
+
+if [ ! -x "$(command -v tmuxinator)" ]; then
+  echo "Installing tmuxinator"
+  install_tmuxinator
+fi
+
+if [ "$TMUX" ]; then
+  if [[ $1 == "-1" ]]; then
+    tmux kill-session -t $(tmux display-message -p '#S')
+    exit 0
+  elif [[ $1 != "-1" ]]; then
+    if [[ -d "$1" ]]; then
+      PROFILE_PATH="${1%/}/template.yaml"
+      echo $PROFILE_PATH
+      write_profile
+      echo "Template saved in $PROFILE_PATH"
+      exit 0
+    fi
+    echo "To exit, run:"
+    echo "$ eztmux -1"
+    exit 1
+  else
+    echo "Session already attached."
+    exit 1
+  fi
+fi
+
+if [ -z $1 ]; then
+  TOTAL_PANE=4
+elif [[ $TOTAL_PANE -gt $MAX_PANE ]]; then
+  TOTAL_PANE=$MAX_PANE
+else
+  TOTAL_PANE=$1
+fi
+
+if [[ $TOTAL_PANE == ?(-)+([0-9]) ]]; then
+  PROFILE_PATH=$TMUX_CONFIG_DIR/$ROS2_WS_CONTAINER_NAME.yaml
+  write_profile
+
+  for ((n=0;n<$TOTAL_PANE;n++))
+    do echo "        -" >> $PROFILE_PATH
+  done
+  tmuxinator start $ROS2_WS_CONTAINER_NAME
+else
+  TMUX_FILE="$1.yaml"
+  if [ -f $TMUX_FILE ]; then
+    tmuxinator start -p "$1.yaml"
+  else
+    echo "No $TMUX_FILE found"
+  fi
+fi
