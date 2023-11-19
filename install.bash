@@ -33,6 +33,7 @@ set -g @yank_selection_mouse 'clipboard'
 run-shell $TMUX_CONFIG_DIR/tmux-yank/yank.tmux
 EOF
 
+rm -rf $TMUX_CONFIG_DIR/eztmux
 git clone https://github.com/grassjelly/eztmux $TMUX_CONFIG_DIR/eztmux
 
 TO_WRITE="alias eztmux=\"\$HOME/.configure/eztmux/eztmux/eztmux\""
