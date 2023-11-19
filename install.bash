@@ -37,7 +37,7 @@ rm -rf $TMUX_CONFIG_DIR/eztmux
 git clone https://github.com/grassjelly/eztmux $TMUX_CONFIG_DIR/eztmux
 
 TO_WRITE="alias eztmux=\"\$HOME/.configure/eztmux/eztmux/eztmux\""
-if [ ! grep -qF "$TO_WRITE" "$HOME/.bashrc" ]; then
+if ! grep -qF '$TO_WRITE' "$HOME/.bashrc" ; then
     echo $TO_WRITE >> $ROS2_WS_MOUNT/.gitignore
 fi
 
