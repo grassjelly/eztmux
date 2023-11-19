@@ -41,4 +41,4 @@ if ! grep -qF '$TO_WRITE' "$HOME/.bashrc" ; then
     echo $TO_WRITE >> $ROS2_WS_MOUNT/.gitignore
 fi
 
-echo "eztmux installed!
+echo "eztmux installed!"
