@@ -56,18 +56,22 @@ else
 fi
 
 if [[ $TOTAL_PANE == ?(-)+([0-9]) ]]; then
-  PROFILE_PATH=$TMUX_CONFIG_DIR/$ROS2_WS_CONTAINER_NAME.yaml
+  PROFILE_PATH=$TMUX_CONFIG_DIR/eztmux.yaml
   write_profile
 
   for ((n=0;n<$TOTAL_PANE;n++))
     do echo "        -" >> $PROFILE_PATH
   done
-  tmuxinator start $ROS2_WS_CONTAINER_NAME
+  tmuxinator start eztmux
 else
-  TMUX_FILE="$1.yaml"
-  if [ -f $TMUX_FILE ]; then
+  TMUX_PROFILE="$TMUX_CONFIG_DIR/$1.yaml"
+  if [ -f $TMUX_PROFILE ]; then
     tmuxinator start -p "$1.yaml"
+  elif [ -f "$PWD/$1" ]; then
+    tmuxinator start -p "$PWD/$1"
+  elif [ -f "$1" ]; then
+    tmuxinator start -p "$1"
   else
-    echo "No $TMUX_FILE found"
+    echo "No tmuxinator file found"
   fi
 fi
