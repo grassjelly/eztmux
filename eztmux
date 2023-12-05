@@ -5,7 +5,7 @@ TMUX_CONFIG_DIR=$HOME/.config/tmuxinator/eztmux
 
 write_profile() {
   cat << EOF > $PROFILE_PATH
-name: $ROS2_WS_CONTAINER_NAME
+name: eztmux
 on_project_start: 
   - #do some stuff here
 pre_window: 
